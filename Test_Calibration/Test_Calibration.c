@@ -15,14 +15,6 @@
 #include "Calibration/potentiometer_calibration.h"
 
 int main (void) {
-    // int8_t pwm_pin;
-    // printf("Enter the PWM pin port connected to the system being controlled by the potentiometer: ");
-    // scanf("%d", &pwm_pin);
-    // while (pwm_pin != 3 | pwm_pin != 5 | pwm_pin != 6 | pwm_pin != 9 | pwm_pin != 10 | pwm_pin != 11) {
-    //     printf("The value entered is not a pwm pin on an arduino uno (please enter a value of 3,5,6,9,10, or 11)");
-    //     printf("Enter the PWM pin port connected to the system being controlled by the potentiometer: ");
-    //     scanf("%d", &pwm_pin);
-    // }
-    calibrate(0, 255);   // use a library function
+    calibrate(0, 100);   // use a library function
     return 0; 
 }
