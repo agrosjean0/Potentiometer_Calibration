@@ -1,7 +1,7 @@
 /**************************************************************************
 * calibration.c
 * Author: Alecea Grosjean 
-* Date: 3/11/2024
+* Date: 3/26/2024
 * Description: C file for the Calibration library that assists in 
 * calibrating linear potentiometers.
 * Copyright (c) 2024
@@ -22,6 +22,9 @@ uint16_t SENSOR_MAX = 0;        // maximum sensor value
 uint16_t PWM_MIN;
 uint16_t PWM_MAX;
 
+uint16_t pwm_lower_limit; 
+uint16_t pwm_upper_limit;
+
 // Counter Varaibles for Calibration Period
 uint16_t sec_cntr;              // Counter for 5 seconds
 bool calibration_complete = 0;  // Calibration period flag, 1 when  complete
@@ -33,7 +36,7 @@ void ADC_setup(bool mux3, bool mux2, bool mux1, bool mux0);
 void pwm_setup();
 uint16_t map(uint16_t sensorValue, uint16_t sensorMin, uint16_t sensorMax, uint16_t limitMin, uint16_t limitMax);
 uint16_t constrain(uint16_t sensorValue, uint16_t sensorMin, uint16_t sensorMax);
-void calibrate(uint16_t PWM_MIN, uint16_t PWM_MAX);
+void calibrate(uint8_t PWM_MIN, uint8_t PWM_MAX);
 /**************************************************************************/
 
 
@@ -41,12 +44,16 @@ void calibrate(uint16_t PWM_MIN, uint16_t PWM_MAX);
 /* The calibration function can be called from other files utilizing the 
 * calibration library to map/calibrate the values of a linear potentiometer 
 * to useful values of a PWM signal to control other peripherals */
-void calibrate(uint16_t PWM_MIN, uint16_t PWM_MAX) 
+void calibrate(uint8_t PWM_MIN, uint8_t PWM_MAX) 
 {
     // Setup
     io_setup();
     ADC_setup(MUX_3, MUX_2, MUX_1, MUX_0);
     pwm_setup();
+
+    // Convert % values of PWM_MIN and PWM_MAX to 16 bit value
+    pwm_lower_limit = floor(65535 * (PWM_MIN / 10.0));
+    pwm_upper_limit = floor(65535 * (PWM_MAX / 10.0));
      
     // Turn on on-board LED to signal the start of the calibration period
     CALIB_PERIOD_PORT |= (1 << CALIB_PERIOD_PIN);
@@ -106,9 +113,9 @@ void calibrate(uint16_t PWM_MIN, uint16_t PWM_MAX)
         SENSOR_VALUE = ADC;
 
         // Map the sensor reading to user values
-        SENSOR_VALUE = map(SENSOR_VALUE, SENSOR_MIN, SENSOR_MAX, PWM_MIN, PWM_MAX);
+        SENSOR_VALUE = map(SENSOR_VALUE, SENSOR_MIN, SENSOR_MAX, pwm_lower_limit, pwm_upper_limit);
         // Constrain the value in case the sensor value is outside the range seen during calibration
-        SENSOR_VALUE = constrain(SENSOR_VALUE, PWM_MIN, PWM_MAX);
+        SENSOR_VALUE = constrain(SENSOR_VALUE, pwm_lower_limit, pwm_upper_limit);
         
         // fade the LED using the calibrated value:
         // PIN 10 - OCR1B, output pin

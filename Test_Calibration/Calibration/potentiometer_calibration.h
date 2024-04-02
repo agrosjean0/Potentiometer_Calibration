@@ -1,11 +1,12 @@
 /**************************************************************************
 * potentiometer_calibration.h
 * Author: Alecea Grosjean 
-* Date: 3/11/2024
+* Date: 3/26/2024
 * Description: Header file for the Calibration library that assists in 
 * calibrating linear potentiometers.
 * Copyright (c) 2024
 ***************************************************************************/
+#define __DELAY_BACKWARD_COMPATIBLE__
 #ifndef _POTENTIOMETER_CALIBRATION_H_
 #define _POTENTIOMETER_CALIBRATION_H_
 
@@ -14,6 +15,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
+#include <math.h>
 #include "Pin_Assignments.h"
 /**************************************************************************/
 
@@ -76,6 +78,6 @@ uint16_t constrain(uint16_t sensorValue, uint16_t sensorMin, uint16_t sensorMax)
 * PWM_MAX: the maximum value of the new range of values for the sensorValue set by the user
 * Returns: 0 once run is complete.
 */
-void calibrate(uint16_t PWM_MIN, uint16_t PWM_MAX);
+void calibrate(uint8_t PWM_MIN, uint8_t PWM_MAX);
 /**************************************************************************/
 #endif
