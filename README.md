@@ -3,4 +3,4 @@ The Potentiometer_Calibration library was created to simplify the code for preci
 
 After compilation, the calibration period is started as indicated by the on-board LED. During this time, the user has 10 seconds to adjust the potentiometer to its greatest position and least position until the on-board LED is no longer lit. This means the potentiometer has been calibrated and the user can move and adjust the PWM output for the LED/Servo using the potentiometer.
 
-Low-level embedded systems programming for Arduino functionality such as timer, ADC, and PWM control is contained in the code of the calibration folder.
+Low-level embedded systems programming for Arduino functionality such as timer, ADC, and PWM control is contained in the code of the calibration folder and further details about components and how to use this code for yourself can be found on the wiki page for this project.
